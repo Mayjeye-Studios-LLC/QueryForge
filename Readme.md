@@ -110,7 +110,28 @@ foreach (var player in players)
 }
 ```
 
-### Updating Data
+### Updating Data with Nested Updates
+
+QueryForge supports nested updates, allowing you to update related entities in a single operation. For example, you can update a `Player` and their `Inventory` and `Item` in one go:
+
+```csharp
+var player = new SelectQuery<Player>(context)
+    .Include("Inventory")
+    .Include("Inventory.Item")
+    .Where("Id=1").ToList().First();
+
+player.Currency = 10000;
+player.Inventory[0].Quantity = 100;
+player.Inventory[0].Item.Name = "SupaSword";
+
+var updatePlayerQuery = new UpdateQuery<Player>(context, player)
+    .Include("Inventory")
+    .Include("Inventory.Item")
+    .Where("Id = 1");
+context.ExecuteQuery(updatePlayerQuery);
+```
+
+Note: Nested updates only work for updates. For inserts, you need to use `InsertQuery` for each entity and remove any entities from lists before updating.
 
 ```csharp
 var updatePlayerQuery = new UpdateQuery<Player>(context, player)
