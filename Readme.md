@@ -1,6 +1,6 @@
 # QueryForge
 
-QueryForge is a lightweight, JSON-centric query system designed for seamless integration with SQLite in games and other lightweight applications. Its primary goal is to simplify database interactions with intuitive query-building, JSON responses, and support for nested subqueries and relationships.
+QueryForge is a lightweight, JSON-centric query system designed for seamless integration with SQLite in games and other lightweight applications. Its primary goal is to simplify database interactions with intuitive query-building, JSON responses, and support for nested subqueries and relationships. Made specifically for Unity 
 
 ## Features
 
