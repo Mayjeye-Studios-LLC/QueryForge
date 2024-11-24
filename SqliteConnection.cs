@@ -20,14 +20,16 @@ namespace QueryForge
     private static extern int sqlite3_exec(IntPtr db, string sql, IntPtr callback, IntPtr arg, out IntPtr errMsg);
 
     private IntPtr db; // Database pointer
+    public bool IsNew { get; private set; }
 
-    public SqliteConnection(string fileName,Action onCreated,Action onLoaded)
+    public SqliteConnection(string fileName)
     {
         var directory = Path.GetDirectoryName(fileName);
         if(!Directory.Exists(directory) && !string.IsNullOrWhiteSpace(directory))
             Directory.CreateDirectory(directory);
-        var newDB = !File.Exists(fileName);
+        IsNew = !File.Exists(fileName);
         OpenDatabase(fileName);
+
     }
    
 
@@ -92,7 +94,7 @@ namespace QueryForge
         if (result != 0) // If SQLite_OK is not returned
         {
             string errorMessage = Marshal.PtrToStringAnsi(errMsg);
-            Debug.LogError($"SQL Error: {errorMessage}");
+            Debug.LogError($@"There was an exception when runnning this sql query Message:{errorMessage}, SQL in question : '{sql}'");
             sqlite3_free(errMsg); // Free error message memory
         }
         else

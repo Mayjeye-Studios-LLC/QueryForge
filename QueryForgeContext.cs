@@ -7,14 +7,33 @@ namespace QueryForge
 {
     public class QueryForgeContext:IDisposable
     {
-        private readonly SqliteConnection _connection;
+        private readonly string _fileName;
+        private SqliteConnection _connection;
 
         public QueryForgeContext(string fileName)
         {
-            this._connection = new SqliteConnection(fileName,
-                () => { }, () => { });
-          
+            _fileName = fileName;
+
         }
+
+        protected virtual void onCreated()
+        {
+        }
+
+        protected virtual void onLoaded()
+        {
+        }
+
+        public void Connect()
+        {
+            this._connection = new SqliteConnection(_fileName);
+            if (this._connection.IsNew)
+                onCreated();
+            else
+                onLoaded();
+            
+        }
+
 
         public void Dispose()
         {
@@ -44,6 +63,8 @@ namespace QueryForge
             }
             catch (Exception e)
             {
+                Debug.LogException(
+                    new SqlException(e,query.QueryString()));
                 Debug.Log($@"Sql query was invalid :{query.QueryString()} ");
 
                 throw new Exception($@"Sql query was invalid ");
@@ -88,5 +109,11 @@ namespace QueryForge
         }
     }
 
- 
+    public class SqlException : Exception
+    {
+        public SqlException(Exception exception, string queryString):base($@"Query was invalid :{queryString}",exception)
+        {
+            //throw new NotImplementedException();
+        }
+    }
 }

@@ -1,9 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace QueryForge
 {
+    public class IntegerToBooleanConverter : JsonConverter<bool>
+    {
+        public override void WriteJson(JsonWriter writer, bool value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value ? 1 : 0);
+        }
+
+        public override bool ReadJson(JsonReader reader, Type objectType, bool existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            int intValue = Convert.ToInt32(reader.Value);
+            return intValue == 1;
+        }
+    }
     public static class QueryForgeTestExtensions
     {
         public static string ToJson(this object ob) => Newtonsoft.Json.JsonConvert.SerializeObject(ob);

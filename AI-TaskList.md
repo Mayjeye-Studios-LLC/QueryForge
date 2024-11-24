@@ -12,6 +12,7 @@
       .Where("Id = 1");
      // this should update player , and every inventory record , but not touch the item table
    ``
+   - test changes
 2. **Enhance Query Capabilities:**
    - Add support for complex query conditions and joins in both `SelectQuery` and `UpdateQuery`.
    - Implement transaction support to ensure data integrity during batch operations.

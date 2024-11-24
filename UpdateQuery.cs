@@ -197,7 +197,7 @@ namespace QueryForge
         {
             if (value is string || value is Guid)
             {
-                return $"'{value}'";
+                return $"'{value.ToString().Replace("'","''")}'";
             }
             if (value is bool)
             {
